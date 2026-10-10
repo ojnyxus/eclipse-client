@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+    />
+    <title>Eclipse Client</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <canvas id="stars"></canvas>
+
+    <div class="app">
+      <header class="titlebar">
+        <div class="titlebar-title">ECLIPSE CLIENT</div>
+        <div class="win-controls">
+          <button id="win-min" aria-label="Minimize">&#8211;</button>
+          <button id="win-max" aria-label="Maximize">&#9633;</button>
+          <button id="win-close" class="close" aria-label="Close">&#10005;</button>
+        </div>
+      </header>
+
+      <div class="body">
+        <aside class="sidebar glass">
+          <div class="brand">
+            <div class="orb"></div>
+            <div>
+              <div class="brand-name">ECLIPSE</div>
+              <div class="brand-sub" id="app-version">CLIENT</div>
+            </div>
+          </div>
+
+          <nav>
+            <button class="nav active" data-view="play">Play</button>
+            <button class="nav" data-view="settings">Settings</button>
+            <button class="nav" data-view="console">Console</button>
+          </nav>
+
+          <div class="spacer"></div>
+
+          <div class="account glass">
+            <div class="avatar" id="avatar">?</div>
+            <div class="account-text">
+              <div class="account-name" id="account-name">Not signed in</div>
+              <button class="link" id="account-action">Sign in with Microsoft</button>
+            </div>
+          </div>
+        </aside>
+
+        <main>
+          <section id="view-play" class="view active">
+            <div class="hero glass">
+              <div class="eyebrow">ENTER THE VOID</div>
+              <h1>Dominate the Grid</h1>
+
+              <div class="row">
+                <div class="field">
+                  <span class="label">Mod loader</span>
+                  <div class="seg" id="loader-seg">
+                    <button data-loader="fabric" class="active">Fabric + Optimization</button>
+                    <button data-loader="vanilla">Vanilla</button>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label" for="version-select">Minecraft version</label>
+                  <select id="version-select"></select>
+                </div>
+              </div>
+
+              <button id="play-btn" class="neon-btn big">Sign in with Microsoft</button>
+
+              <div class="progress" id="progress" hidden><div class="bar" id="bar"></div></div>
+              <div class="status" id="status">Ready.</div>
+            </div>
+          </section>
+
+          <section id="view-settings" class="view">
+            <div class="card glass">
+              <div class="card-title">RAM allocation</div>
+              <div class="ram-value"><span id="ram-value">4</span><small id="ram-total"></small></div>
+              <input type="range" id="ram" min="1024" max="8192" step="256" />
+              <div class="hint" id="ram-hint"></div>
+            </div>
+
+            <div class="card glass">
+              <div class="card-title">Performance</div>
+              <label class="toggle">
+                <input type="checkbox" id="opt-jvm" />
+                <span>Pre-tuned JVM flags (G1GC)</span>
+              </label>
+              <label class="toggle">
+                <input type="checkbox" id="opt-mods" />
+                <span>Install Sodium, Lithium and FerriteCore (Fabric only)</span>
+              </label>
+              <div class="flags" id="flags"></div>
+            </div>
+
+            <div class="card glass">
+              <div class="card-title">Game files</div>
+              <button class="ghost-btn" id="open-folder">Open game folder</button>
+            </div>
+          </section>
+
+          <section id="view-console" class="view">
+            <div class="card glass console-card">
+              <div class="card-title">Console</div>
+              <pre id="console"></pre>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="starfield.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

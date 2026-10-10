@@ -1,44 +1,36 @@
-import { useState } from 'react';
-
 interface Feature {
   icon: string;
   title: string;
   description: string;
   details: string[];
+  soon?: boolean;
 }
+
+const DOWNLOAD_URL =
+  'https://github.com/ojnyxus/eclipse-client/releases/latest/download/Eclipse-Client-Setup.exe';
+const RELEASES_URL = 'https://github.com/ojnyxus/eclipse-client/releases';
 
 const FEATURES: Feature[] = [
   {
     icon: '🚀',
-    title: '100,000 FPS Optimization Engine',
-    description: 'On first launch, Eclipse profiles your system and assembles a performance-optimized instance automatically.',
+    title: 'Performance Engine',
+    description: 'Pick a version and press Play. Eclipse prepares an optimized Fabric instance for you.',
     details: [
-      'Sodium, Lithium, FerriteCore (Fabric)',
-      'OptiFine + Patcher (Forge)',
-      'Adaptive JVM flags tuned to your hardware',
-      'One-click revert to vanilla',
+      'Sodium, Lithium and FerriteCore installed from Modrinth',
+      'Pre-tuned G1GC JVM flags',
+      'Separate Fabric instance per version, so mods never clash',
+      'Switch to Vanilla any time',
     ],
   },
   {
-    icon: '🎮',
-    title: 'Advanced HUD Configurator',
-    description: 'A real-time overlay system for players who live and die by information density.',
+    icon: '🔐',
+    title: 'Official Microsoft Sign-in',
+    description: 'You sign in on Microsoft\'s own page. Eclipse never sees or stores your password.',
     details: [
-      'FPS, Ping, CPS counters',
-      'Keystrokes (WASD) + Toggle Sprint',
-      'Armor status with durability',
-      'Drag-repositionable, JSON export/import',
-    ],
-  },
-  {
-    icon: '🧑‍🚀',
-    title: 'Local Profile & Skin Manager',
-    description: 'Multiple profile slots so you switch accounts without re-entering credentials each time.',
-    details: [
-      'Multiple profile slots',
-      'Custom skin preview in 3D viewport',
-      'Profile-specific HUD & RAM settings',
-      'Microsoft/Mojang auth flow',
+      'Only a refresh token is kept, encrypted by Windows',
+      'Needs a Minecraft: Java Edition account',
+      'Java runtime downloaded automatically, nothing to install',
+      'RAM slider that warns before you over-allocate',
     ],
   },
   {
@@ -47,23 +39,33 @@ const FEATURES: Feature[] = [
     description: 'Glassmorphism panels floating over a pure obsidian base with a live interactive starfield.',
     details: [
       'Frameless glassmorphic window',
-      'HTML5 Canvas parallax starfield',
+      'Canvas parallax starfield',
       'Neon-violet accent system',
-      'Spring-animated micro-interactions',
+      'Live console with the game log',
     ],
+  },
+  {
+    icon: '🎮',
+    title: 'HUD Configurator',
+    description: 'Drag-and-drop overlays for FPS, ping, CPS and keystrokes.',
+    details: [
+      'FPS, Ping, CPS counters',
+      'Keystrokes (WASD) + Toggle Sprint',
+      'JSON export / import',
+      'Needs an in-game mod, so it is not part of this release',
+    ],
+    soon: true,
   },
 ];
 
 const STATS = [
-  { value: '100K', label: 'FPS Ceiling' },
-  { value: '6ms', label: 'Input Lag' },
-  { value: '48MB', label: 'Idle RAM' },
+  { value: '3', label: 'Optimization mods' },
+  { value: 'Auto', label: 'Java runtime' },
+  { value: 'Official', label: 'Microsoft sign-in' },
   { value: '0', label: 'Telemetry' },
 ];
 
 export default function LandingPage() {
-  const [downloadClicked, setDownloadClicked] = useState(false);
-
   return (
     <div
       style={{
@@ -166,7 +168,7 @@ export default function LandingPage() {
         </p>
         <div style={{ display: 'flex', gap: 14, position: 'relative' }}>
           <a
-            href="#download"
+            href={DOWNLOAD_URL}
             className="neon-btn"
             style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, padding: '14px 32px', fontSize: 15 }}
           >
@@ -181,9 +183,8 @@ export default function LandingPage() {
           </a>
         </div>
         <div style={{ display: 'flex', gap: 8, marginTop: 20, position: 'relative' }}>
-          <span style={badgeStyle}>Windows</span>
-          <span style={badgeStyle}>macOS</span>
-          <span style={badgeStyle}>Linux</span>
+          <span style={badgeStyle}>Windows 10 / 11</span>
+          <span style={badgeStyle}>64-bit</span>
         </div>
       </section>
 
@@ -231,7 +232,14 @@ export default function LandingPage() {
               }}
             >
               <div style={{ fontSize: 32, marginBottom: 14 }}>{f.icon}</div>
-              <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 10 }}>{f.title}</h3>
+              <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 10 }}>
+                {f.title}
+                {f.soon && (
+                  <span style={{ ...badgeStyle, marginLeft: 10, verticalAlign: 'middle', color: 'var(--warning)' }}>
+                    Coming soon
+                  </span>
+                )}
+              </h3>
               <p style={{ fontSize: 13, color: 'var(--text-dim)', lineHeight: 1.6, marginBottom: 16 }}>{f.description}</p>
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {f.details.map((d, j) => (
@@ -275,52 +283,30 @@ export default function LandingPage() {
           Ready to enter the void?
         </h2>
         <p style={{ fontSize: 15, color: 'var(--text-dim)', maxWidth: 460, lineHeight: 1.6, marginBottom: 36, position: 'relative' }}>
-          Download Eclipse Client for free. No account required, no telemetry, no bloat.
-          Just an optimized Minecraft session, one click away.
+          Download Eclipse Client for free. Sign in with your Minecraft account and press Play.
+          No telemetry, no bloat.
         </p>
 
-        {downloadClicked ? (
-          <div
-            className="glass"
-            style={{ padding: '24px 36px', borderRadius: 'var(--radius)', textAlign: 'center', position: 'relative' }}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center', position: 'relative' }}>
+          <a
+            href={DOWNLOAD_URL}
+            className="neon-btn"
+            style={{ textDecoration: 'none', padding: '16px 48px', fontSize: 16, display: 'inline-flex', alignItems: 'center', gap: 10 }}
           >
-            <div style={{ fontSize: 14, color: 'var(--success)', fontWeight: 600, marginBottom: 8 }}>
-              ✓ Redirecting to GitHub Releases...
-            </div>
-            <div style={{ fontSize: 12, color: 'var(--text-faint)' }}>
-              If the download doesn't start,{' '}
-              <a
-                href="https://github.com/ojnyxus/eclipse-client/releases"
-                target="_blank"
-                rel="noopener"
-                style={{ color: 'var(--neon-bright)' }}
-              >
-                click here
-              </a>
-            </div>
+            ⬇ Download Eclipse-Client-Setup.exe
+          </a>
+          <div style={{ fontSize: 12, color: 'var(--text-faint)' }}>
+            v1.0.0-beta · Windows 10 / 11 · 64-bit ·{' '}
+            <a href={RELEASES_URL} target="_blank" rel="noopener" style={{ color: 'var(--neon-bright)' }}>
+              all releases
+            </a>
           </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center', position: 'relative' }}>
-            <button
-              className="neon-btn"
-              style={{ padding: '16px 48px', fontSize: 16, display: 'flex', alignItems: 'center', gap: 10 }}
-              onClick={() => {
-                setDownloadClicked(true);
-                window.open('https://github.com/ojnyxus/eclipse-client/releases', '_blank');
-              }}
-            >
-              ⬇ Download Eclipse Client
-            </button>
-            <div style={{ fontSize: 12, color: 'var(--text-faint)' }}>
-              v1.0.0-beta · ~42 MB · Windows · macOS · Linux
-            </div>
-          </div>
-        )}
+        </div>
 
         <div style={{ display: 'flex', gap: 24, marginTop: 40, position: 'relative' }}>
           <span style={{ fontSize: 12, color: 'var(--text-faint)' }}>✓ Open Source (MIT)</span>
           <span style={{ fontSize: 12, color: 'var(--text-faint)' }}>✓ No telemetry</span>
-          <span style={{ fontSize: 12, color: 'var(--text-faint)' }}>✓ Auto-updates</span>
+          <span style={{ fontSize: 12, color: 'var(--text-faint)' }}>✓ Official Microsoft sign-in</span>
         </div>
       </section>
 

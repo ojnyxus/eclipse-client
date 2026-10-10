@@ -1,0 +1,44 @@
+name: Build launcher
+
+# Builds the Windows installer (Eclipse-Client-Setup.exe).
+#  - Run it by hand: Actions tab -> "Build launcher" -> Run workflow (the .exe is attached as an artifact).
+#  - Publish a release: push a tag such as v1.0.0-beta (the .exe is attached to the GitHub Release).
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: launcher
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: launcher/package-lock.json
+
+      - run: npm ci
+
+      - run: npm run dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Eclipse-Client-Setup
+          path: launcher/dist/Eclipse-Client-Setup.exe
+
+      - name: Attach to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: launcher/dist/Eclipse-Client-Setup.exe
+          prerelease: ${{ contains(github.ref_name, '-') }}
